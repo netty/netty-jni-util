@@ -392,6 +392,8 @@ static int dladdr(void *ptr, Dl_info *dl)
 jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, jint (*load_function)(JNIEnv*, const char*)) {
     JNIEnv* env = NULL;
     if ((*vm)->GetEnv(vm, (void**) &env, NETTY_JNI_UTIL_JNI_VERSION) != JNI_OK) {
+        fprintf(stderr, "FATAL: JNI version missmatch");
+        fflush(stderr);
         return JNI_ERR;
     }
 
@@ -404,6 +406,7 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
     // function. See https://github.com/netty/netty/issues/4840.
     if (!dladdr((void*) parsePackagePrefix, &dlinfo)) {
         fprintf(stderr, "FATAL: %s JNI call to dladdr failed!\n", libname);
+        fflush(stderr);
         return JNI_ERR;
     }
     name = dlinfo.dli_fname;
@@ -411,6 +414,7 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
     HMODULE module = NULL;
     if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (void*) parsePackagePrefix, &module) == 0){
         fprintf(stderr, "FATAL: %s JNI call to GetModuleHandleExA failed!\n", libname);
+        fflush(stderr);
         return JNI_ERR;
     }
 
@@ -420,6 +424,7 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
     int dllPathLen = GetModuleFileNameA(module, dllPath, MAX_DLL_PATH_LEN);
     if (dllPathLen == 0) {
         fprintf(stderr, "FATAL: %s JNI call to GetModuleFileNameA failed!\n", libname);
+        fflush(stderr);
         return JNI_ERR;
     } else {
         // ensure we null terminate as this is not automatically done on windows xp
@@ -432,6 +437,7 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
 
     if (status == JNI_ERR) {
         fprintf(stderr, "FATAL: %s encountered unexpected library path: %s\n", name, libname);
+        fflush(stderr);
         return JNI_ERR;
     }
 #else
@@ -452,6 +458,8 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
 void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_function)(JNIEnv*, const char*)) {
     JNIEnv* env = NULL;
     if ((*vm)->GetEnv(vm, (void**) &env, NETTY_JNI_UTIL_JNI_VERSION) != JNI_OK) {
+        fprintf(stderr, "FATAL: JNI version missmatch");
+        fflush(stderr);
         // Something is wrong but nothing we can do about this :(
         return;
     }
