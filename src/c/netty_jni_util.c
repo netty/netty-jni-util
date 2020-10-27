@@ -36,6 +36,7 @@
 #include <dlfcn.h>
 #else
 #define MAX_DLL_PATH_LEN 2048
+#include <windows.h>
 #endif // _WIN32
 
 #include <stdlib.h>
