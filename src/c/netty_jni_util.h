@@ -127,6 +127,6 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
 /**
  * Function should be called when the native library is unloaded
  */
-void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, jint (*unload_function)(JNIEnv*, const char*));
+void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_function)(JNIEnv*, const char*));
 
 #endif /* NETTY_JNI_UTIL_H_ */

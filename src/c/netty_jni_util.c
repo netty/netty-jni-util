@@ -449,7 +449,7 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
     return ret;
 }
 
-void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, jint (*unload_function)(JNIEnv*, const char*)) {
+void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_function)(JNIEnv*, const char*)) {
     JNIEnv* env = NULL;
     if ((*vm)->GetEnv(vm, (void**) &env, NETTY_JNI_UTIL_JNI_VERSION) != JNI_OK) {
         // Something is wrong but nothing we can do about this :(
