@@ -156,7 +156,7 @@ char* netty_jni_util_rstrstr(char* s1rbegin, const char* s1rend, const char* s2)
 
 #ifdef _WIN32
 static char* netty_jni_util_rstrchar(char* s1rbegin, const char* s1rend, const char c2) {
-    if (s1rbegin == NULL || s1rend == NULL || s2 == NULL) {
+    if (s1rbegin == NULL || s1rend == NULL || c2 == NULL) {
         // Return NULL if any of the parameters is NULL to not risk a segfault
         return NULL;
     }
