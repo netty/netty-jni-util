@@ -44,6 +44,23 @@
 
 static char*     staticPackagePrefix;
 
+void netty_jni_util_free_dynamic_methods_table(JNINativeMethod* dynamicMethods, jint fixedMethodTableSize, jint fullMethodTableSize) {
+    if (dynamicMethods != NULL) {
+        jint i = fixedMethodTableSize;
+        for (; i < fullMethodTableSize; ++i) {
+            free(dynamicMethods[i].signature);
+        }
+        free(dynamicMethods);
+    }
+}
+
+void netty_jni_util_free_dynamic_name(char** dynamicName) {
+    if (dynamicName != NULL && *dynamicName != NULL) {
+        free(*dynamicName);
+        *dynamicName = NULL;
+    }
+}
+
 char* netty_jni_util_prepend(const char* prefix, const char* str) {
     if (str == NULL) {
         // If str is NULL we should just return NULL as passing NULL to strlen is undefined behavior.
