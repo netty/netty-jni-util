@@ -13,7 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-final class JniUtil {
+
+/**
+ * Dummy class
+ */
+public final class JniUtil {
     JniUtil() {
         // Dummy class
     }
