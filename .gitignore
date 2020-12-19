@@ -19,3 +19,6 @@ cmake_install.cmake
 Makefile
 *~
 out
+target
+.idea
+*.iml
