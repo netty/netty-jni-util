@@ -33,5 +33,5 @@ endif()
 INCLUDE_DIRECTORIES(${JAVA_INCLUDE_PATH})
 INCLUDE_DIRECTORIES(${JAVA_INCLUDE_PATH2})
 
-add_library(netty_jni_util SHARED src/c/netty_jni_util.c)
+add_library(netty_jni_util SHARED src/main/c/netty_jni_util.c)
 
