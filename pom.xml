@@ -130,7 +130,7 @@
         <version>2.5.3</version>
         <configuration>
           <useReleaseProfile>false</useReleaseProfile>
-          <arguments>-P restricted-release,sonatype-oss-release,full</arguments>
+          <arguments>-P sonatype-oss-release</arguments>
           <autoVersionSubmodules>true</autoVersionSubmodules>
           <allowTimestampedSnapshots>false</allowTimestampedSnapshots>
           <tagNameFormat>${project.artifactId}-@{project.version}</tagNameFormat>
