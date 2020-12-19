@@ -14,8 +14,7 @@
   ~ License for the specific language governing permissions and limitations
   ~ under the License.
   -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.sonatype.oss</groupId>
@@ -25,7 +24,7 @@
 
   <groupId>io.netty</groupId>
   <artifactId>netty-jni-util</artifactId>
-  <version>0.0.2.Final-SNAPSHOT</version>
+  <version>0.0.2.Final</version>
   <name>Netty/JNI/Util</name>
   <packaging>jar</packaging>
   <url>https://netty.io/</url>
@@ -52,7 +51,7 @@
     <url>https://github.com/netty/netty-jni-util</url>
     <connection>scm:git:git://github.com/netty/netty-jni-util.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/netty/netty-jni-util.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>netty-jni-util-0.0.2.Final</tag>
   </scm>
 
   <developers>
