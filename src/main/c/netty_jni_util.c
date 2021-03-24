@@ -43,8 +43,6 @@
 #include <string.h>
 #include "netty_jni_util.h"
 
-static char*     staticPackagePrefix;
-
 void netty_jni_util_free_dynamic_methods_table(JNINativeMethod* dynamicMethods, jint fixedMethodTableSize, jint fullMethodTableSize) {
     if (dynamicMethods != NULL) {
         jint i = fixedMethodTableSize;
@@ -463,17 +461,11 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
 #endif /* NETTY_JNI_UTIL_BUILD_STATIC */
 
     jint ret = load_function(env, packagePrefix);
-    if (ret == JNI_ERR) {
-        free(packagePrefix);
-        staticPackagePrefix = NULL;
-    } else {
-        // This will be freed when we unload.
-        staticPackagePrefix = packagePrefix;
-    }
+    free(packagePrefix);
     return ret;
 }
 
-void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_function)(JNIEnv*, const char*)) {
+void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_function)(JNIEnv*)) {
     JNIEnv* env = NULL;
     if ((*vm)->GetEnv(vm, (void**) &env, NETTY_JNI_UTIL_JNI_VERSION) != JNI_OK) {
         fprintf(stderr, "FATAL: JNI version missmatch");
@@ -481,7 +473,5 @@ void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_funct
         // Something is wrong but nothing we can do about this :(
         return;
     }
-    unload_function(env, staticPackagePrefix);
-    free(staticPackagePrefix);
-    staticPackagePrefix = NULL;
+    unload_function(env);
 }
