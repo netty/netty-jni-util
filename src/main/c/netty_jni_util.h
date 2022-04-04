@@ -120,13 +120,13 @@ void netty_jni_util_free_dynamic_methods_table(JNINativeMethod* dynamicMethods, 
 void netty_jni_util_free_dynamic_name(char** dynamicName);
 
 /**
- * Function should be called when the native library is loaded
+ * Function should be called when the native library is loaded. load_function takes ownership of packagePrefix.
  */
-jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, jint (*load_function)(JNIEnv*, const char*));
+jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, jint (*load_function)(JNIEnv* env, const char* packagePrefix));
 
 /**
  * Function should be called when the native library is unloaded
  */
-void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_function)(JNIEnv*));
+void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_function)(JNIEnv* env));
 
 #endif /* NETTY_JNI_UTIL_H_ */

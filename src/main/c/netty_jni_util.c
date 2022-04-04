@@ -437,7 +437,6 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
 #endif /* NETTY_JNI_UTIL_BUILD_STATIC */
 
     jint ret = load_function(env, packagePrefix);
-    free(packagePrefix);
     return ret;
 }
 
