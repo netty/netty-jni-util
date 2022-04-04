@@ -114,29 +114,6 @@ done:
 
 #ifndef NETTY_JNI_UTIL_BUILD_STATIC
 
-static char* netty_jni_util_strndup(const char *s, size_t n) {
-    if (s == NULL) {
-        // passing NULL to strndup is undefined behavior and may core dump.
-        return NULL;
-    }
-
-// windows / solaris does not have strndup
-#if defined(_WIN32) || defined(__sun)
-#ifdef _WIN32
-    char* copy = _strdup(s);
-#else
-    char* copy = strdup(s);
-#endif // _WIN32
-    if (copy != NULL && n < strlen(copy)) {
-        // mark the end
-        copy[n] = '\0';
-    }
-    return copy;
-#else
-    return strndup(s, n);
-#endif // defined(_WIN32) || defined(__sun)
-}
-
 char* netty_jni_util_rstrstr(char* s1rbegin, const char* s1rend, const char* s2) {
     if (s1rbegin == NULL || s1rend == NULL || s2 == NULL) {
         // Return NULL if any of the parameters is NULL to not risk a segfault
@@ -220,28 +197,27 @@ static char* parsePackagePrefix(const char* libraryPathName, const char* libname
     // packagePrefix length is > 0
     // Make a copy so we can modify the value without impacting libraryPathName.
     size_t packagePrefixLen = packageNameEnd - packagePrefix;
-    if ((packagePrefix = netty_jni_util_strndup(packagePrefix, packagePrefixLen)) == NULL) {
+    if (*packageNameEnd != '_' && *packageNameEnd != '/') {
+        packagePrefixLen++;
+    }
+    char* newPackagePrefix = malloc(packagePrefixLen + 1);
+    if (newPackagePrefix == NULL) {
         *status = JNI_ERR;
         return NULL;
     }
-    // Make sure the packagePrefix is in the correct format for the JNI functions it will be used with.
-    char* temp = packagePrefix;
-    packageNameEnd = packagePrefix + packagePrefixLen;
-    // Package names must be sanitized, in JNI packages names are separated by '/' characters.
-    for (; temp != packageNameEnd; ++temp) {
-        if (*temp == '_') {
-            *temp = '/';
-        }
-    }
+    memcpy(newPackagePrefix, packagePrefix, packagePrefixLen);
+    newPackagePrefix[packagePrefixLen] = '\0';
     // Make sure packagePrefix is terminated with the '/' JNI package separator.
-    if(*(--temp) != '/') {
-        temp = packagePrefix;
-        if ((packagePrefix = netty_jni_util_prepend(packagePrefix, "/")) == NULL) {
-            *status = JNI_ERR;
-        }
-        free(temp);
+    if (*packageNameEnd != '_' && *packageNameEnd != '/') {
+        newPackagePrefix[--packagePrefixLen] = '/';
     }
-    return packagePrefix;
+    // Package names must be sanitized, in JNI packages names are separated by '/' characters.
+    for (size_t i = 0; i < packagePrefixLen; ++i) {
+        if (newPackagePrefix[i] == '_') {
+            newPackagePrefix[i] = '/';
+        }
+    }
+    return newPackagePrefix;
 }
 
 #endif /* NETTY_JNI_UTIL_BUILD_STATIC */
