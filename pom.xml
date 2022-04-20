@@ -24,7 +24,7 @@
 
   <groupId>io.netty</groupId>
   <artifactId>netty-jni-util</artifactId>
-  <version>0.0.5.Final-SNAPSHOT</version>
+  <version>0.0.4.Final-SNAPSHOT</version>
   <name>Netty/JNI/Util</name>
   <packaging>jar</packaging>
   <url>https://netty.io/</url>
