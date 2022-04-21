@@ -212,7 +212,8 @@ static char* parsePackagePrefix(const char* libraryPathName, const char* libname
         newPackagePrefix[--packagePrefixLen] = '/';
     }
     // Package names must be sanitized, in JNI packages names are separated by '/' characters.
-    for (size_t i = 0; i < packagePrefixLen; ++i) {
+    size_t i;
+    for (i = 0; i < packagePrefixLen; ++i) {
         if (newPackagePrefix[i] == '_') {
             newPackagePrefix[i] = '/';
         }
