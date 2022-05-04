@@ -194,30 +194,62 @@ static char* parsePackagePrefix(const char* libraryPathName, const char* libname
     if (packagePrefix == packageNameEnd) {
         return NULL;
     }
+
     // packagePrefix length is > 0
     // Make a copy so we can modify the value without impacting libraryPathName.
     size_t packagePrefixLen = packageNameEnd - packagePrefix;
-    if (*packageNameEnd != '_' && *packageNameEnd != '/') {
-        packagePrefixLen++;
-    }
-    char* newPackagePrefix = malloc(packagePrefixLen + 1);
+    char* newPackagePrefix = malloc(packagePrefixLen + 2); // +1 for trailing slash and +1 for \0
     if (newPackagePrefix == NULL) {
         *status = JNI_ERR;
         return NULL;
     }
-    memcpy(newPackagePrefix, packagePrefix, packagePrefixLen);
-    newPackagePrefix[packagePrefixLen] = '\0';
-    // Make sure packagePrefix is terminated with the '/' JNI package separator.
-    if (*packageNameEnd != '_' && *packageNameEnd != '/') {
-        newPackagePrefix[--packagePrefixLen] = '/';
-    }
-    // Package names must be sanitized, in JNI packages names are separated by '/' characters.
+
+    // Unmangle the package name, by translating:
+    // - `_1` to `_`
+    // - `_` to `/`
+    //
+    // Note that we don't unmangle `_0xxxx` because it's extremely unlikely to have a non-ASCII character
+    // in a package name. For more information, see:
+    // - JNI specification: https://docs.oracle.com/javase/8/docs/technotes/guides/jni/spec/design.html#resolving_native_method_names
+    // - `NativeLibraryLoader.load()` that mangles a package name.
     size_t i;
+    size_t j = 0;
     for (i = 0; i < packagePrefixLen; ++i) {
-        if (newPackagePrefix[i] == '_') {
-            newPackagePrefix[i] = '/';
+        char ch = packagePrefix[i];
+        if (ch != '_') {
+            newPackagePrefix[j++] = ch;
+            continue;
+        }
+
+        char nextCh = packagePrefix[i + 1];
+        if (nextCh < '0' || nextCh > '9') {
+            // No digit after `_`; translate to `/`.
+            newPackagePrefix[j++] = '/';
+            continue;
+        }
+
+        if (nextCh == '1') {
+            i++;
+            newPackagePrefix[j++] = '_';
+        } else {
+            // We don't support _0, _2 .. _9.
+            fprintf(stderr,
+                    "FATAL: Unsupported escape pattern '_%c' in library name '%s'\n",
+                    nextCh, packagePrefix);
+            fflush(stderr);
+            free(newPackagePrefix);
+            *status = JNI_ERR;
+            return NULL;
         }
     }
+
+    // Make sure the prefix ends with `/`.
+    if (newPackagePrefix[j - 1] != '/') {
+        newPackagePrefix[j++] = '/';
+    }
+
+    // Terminate with `\0`.
+    newPackagePrefix[j++] = '\0';
     return newPackagePrefix;
 }
 
