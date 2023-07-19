@@ -24,7 +24,7 @@
 
   <groupId>io.netty</groupId>
   <artifactId>netty-jni-util</artifactId>
-  <version>0.0.7.Final-SNAPSHOT</version>
+  <version>0.0.7.Final</version>
   <name>Netty/JNI/Util</name>
   <packaging>jar</packaging>
   <url>https://netty.io/</url>
@@ -51,7 +51,7 @@
     <url>https://github.com/netty/netty-jni-util</url>
     <connection>scm:git:git://github.com/netty/netty-jni-util.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/netty/netty-jni-util.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>netty-jni-util-0.0.7.Final</tag>
   </scm>
 
   <developers>
