@@ -57,6 +57,28 @@
         }                                           \
     NETTY_JNI_UTIL_END_MACRO
 
+#define NETTY_JNI_UTIL_LOAD_CLASS_WEAK(E, C, N, R)  \
+    NETTY_JNI_UTIL_BEGIN_MACRO                      \
+        jclass _##C = (*(E))->FindClass((E), N);    \
+        if (_##C == NULL) {                         \
+            (*(E))->ExceptionClear((E));            \
+            goto R;                                 \
+        }                                           \
+        C = (*(E))->NewWeakGlobalRef((E), _##C);    \
+        (*(E))->DeleteLocalRef((E), _##C);          \
+        if (C == NULL) {                            \
+            goto R;                                 \
+        }                                           \
+    NETTY_JNI_UTIL_END_MACRO
+
+#define NETTY_JNI_UTIL_UNLOAD_CLASS_WEAK(E, C)      \
+    NETTY_JNI_UTIL_BEGIN_MACRO                      \
+        if (C != NULL) {                            \
+            (*(E))->DeleteWeakGlobalRef((E), (C));  \
+            C = NULL;                               \
+        }                                           \
+    NETTY_JNI_UTIL_END_MACRO
+
 
 #define NETTY_JNI_UTIL_GET_METHOD(E, C, M, N, S, R) \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
