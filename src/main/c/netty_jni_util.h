@@ -88,6 +88,13 @@
         }                                                       \
     NETTY_JNI_UTIL_END_MACRO
 
+#define NETTY_JNI_UTIL_DELETE_LOCAL(E, L)   \
+    NETTY_JNI_UTIL_BEGIN_MACRO              \
+        if (L != NULL) {                    \
+            (*(E))->DeleteLocalRef((E), L); \
+        }                                   \
+    NETTY_JNI_UTIL_END_MACRO
+
 #define NETTY_JNI_UTIL_GET_METHOD(E, C, M, N, S, R) \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
         M = (*(E))->GetMethodID((E), C, N, S);      \
