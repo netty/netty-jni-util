@@ -92,6 +92,7 @@
     NETTY_JNI_UTIL_BEGIN_MACRO              \
         if (L != NULL) {                    \
             (*(E))->DeleteLocalRef((E), L); \
+            L = NULL;                       \
         }                                   \
     NETTY_JNI_UTIL_END_MACRO
 
