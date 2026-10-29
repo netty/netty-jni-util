@@ -132,14 +132,19 @@ char* netty_jni_util_rstrstr(char* s1rbegin, const char* s1rend, const char* s2)
 
 #ifdef _WIN32
 static char* netty_jni_util_rstrchar(char* s1rbegin, const char* s1rend, const char c2) {
-    if (s1rbegin == NULL || s1rend == NULL || c2 == NULL) {
+    if (s1rbegin == NULL || s1rend == NULL || s1rbegin < s1rend) {
         // Return NULL if any of the parameters is NULL to not risk a segfault
         return NULL;
     }
-    for (; s1rbegin >= s1rend; --s1rbegin) {
+    for (;;) {
         if (*s1rbegin == c2) {
             return s1rbegin;
         }
+        if (s1rbegin == s1rend) {
+            break;
+        }
+        // Only decrement if we will not move before s1rend, as this is undefined behavior.
+        --s1rbegin;
     }
     return NULL;
 }
@@ -174,7 +179,7 @@ static char* parsePackagePrefix(const char* libraryPathName, const char* libname
     }
 #ifdef _WIN32
     // on windows there is no lib prefix so we instead look for the previous path separator or the beginning of the string.
-    char* packagePrefix = netty_jni_util_rstrchar(packageNameEnd, libraryPathName, '\\');
+    const char* packagePrefix = netty_jni_util_rstrchar(packageNameEnd, libraryPathName, '\\');
     if (packagePrefix == NULL) {
         // The string does not have to specify a path [1].
         // [1] https://msdn.microsoft.com/en-us/library/windows/desktop/ms683200(v=vs.85).aspx
@@ -183,7 +188,7 @@ static char* parsePackagePrefix(const char* libraryPathName, const char* libname
         packagePrefix += 1;
     }
 #else
-    char* packagePrefix = netty_jni_util_rstrstr(packageNameEnd, libraryPathName, "lib");
+    const char* packagePrefix = netty_jni_util_rstrstr(packageNameEnd, libraryPathName, "lib");
     if (packagePrefix == NULL) {
         *status = JNI_ERR;
         return NULL;
