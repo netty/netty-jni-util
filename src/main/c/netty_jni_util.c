@@ -420,7 +420,9 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
     char* packagePrefix = parsePackagePrefix(name, libname, &status);
 
     if (status == JNI_ERR) {
-        fprintf(stderr, "FATAL: %s encountered unexpected library path: %s\n", name, libname);
+        // name may be NULL if dladdr did not provide a file name, passing NULL to %s is undefined behavior.
+        fprintf(stderr, "FATAL: %s encountered unexpected library path: %s\n",
+                libname == NULL ? "(null)" : libname, name == NULL ? "(null)" : name);
         fflush(stderr);
         return JNI_ERR;
     }
