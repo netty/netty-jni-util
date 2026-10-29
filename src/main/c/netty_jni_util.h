@@ -134,13 +134,13 @@
  */
 char* netty_jni_util_prepend(const char* prefix, const char* str);
 
-char* netty_jni_util_rstrstr(char* s1rbegin, const char* s1rend, const char* s2);
-
+#ifndef NETTY_JNI_UTIL_BUILD_STATIC
 /**
- * The expected format of the library name is "lib<>$libraryName" where the <> portion is what we will return.
- * If status != JNI_ERR then the caller MUST call free on the return value.
+ * Search backwards, starting at s1rbegin and not going below s1rend, for s2. Only available if
+ * NETTY_JNI_UTIL_BUILD_STATIC is not defined.
  */
-char* netty_jni_util_parse_package_prefix(const char* libraryPathName, const char* libraryName, jint* status);
+char* netty_jni_util_rstrstr(char* s1rbegin, const char* s1rend, const char* s2);
+#endif /* NETTY_JNI_UTIL_BUILD_STATIC */
 
 /**
  * Return type is as defined in https://docs.oracle.com/javase/7/docs/technotes/guides/jni/spec/functions.html#wp5833.
