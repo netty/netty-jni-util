@@ -445,8 +445,16 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
         fprintf(stderr, "FATAL: %s encountered unexpected library path: %s\n",
                 libname == NULL ? "(null)" : libname, name == NULL ? "(null)" : name);
         fflush(stderr);
+#ifdef _AIX
+        // Our dladdr implementation allocates dli_fname, so we need to free it.
+        free((void*) dlinfo.dli_fname);
+#endif
         return JNI_ERR;
     }
+#ifdef _AIX
+    // Our dladdr implementation allocates dli_fname, so we need to free it. The prefix is a copy so this is safe.
+    free((void*) dlinfo.dli_fname);
+#endif
 #else
     char* packagePrefix = NULL;
 #endif /* NETTY_JNI_UTIL_BUILD_STATIC */
