@@ -28,8 +28,8 @@
 
 #define NETTY_JNI_UTIL_FIND_CLASS(E, C, N, R)       \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
-        C = (*(E))->FindClass((E), N);              \
-        if (C == NULL) {                            \
+        (C) = (*(E))->FindClass((E), (N));          \
+        if ((C) == NULL) {                          \
             (*(E))->ExceptionClear((E));            \
             goto R;                                 \
         }                                           \
@@ -37,45 +37,45 @@
 
 #define NETTY_JNI_UTIL_LOAD_CLASS(E, C, N, R)       \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
-        jclass _##C = (*(E))->FindClass((E), N);    \
+        jclass _##C = (*(E))->FindClass((E), (N));  \
         if (_##C == NULL) {                         \
             (*(E))->ExceptionClear((E));            \
             goto R;                                 \
         }                                           \
-        C = (*(E))->NewGlobalRef((E), _##C);        \
+        (C) = (*(E))->NewGlobalRef((E), _##C);      \
         (*(E))->DeleteLocalRef((E), _##C);          \
-        if (C == NULL) {                            \
+        if ((C) == NULL) {                          \
             goto R;                                 \
         }                                           \
     NETTY_JNI_UTIL_END_MACRO
 
 #define NETTY_JNI_UTIL_UNLOAD_CLASS(E, C)           \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
-        if (C != NULL) {                            \
+        if ((C) != NULL) {                          \
             (*(E))->DeleteGlobalRef((E), (C));      \
-            C = NULL;                               \
+            (C) = NULL;                             \
         }                                           \
     NETTY_JNI_UTIL_END_MACRO
 
 #define NETTY_JNI_UTIL_LOAD_CLASS_WEAK(E, C, N, R)  \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
-        jclass _##C = (*(E))->FindClass((E), N);    \
+        jclass _##C = (*(E))->FindClass((E), (N));  \
         if (_##C == NULL) {                         \
             (*(E))->ExceptionClear((E));            \
             goto R;                                 \
         }                                           \
-        C = (*(E))->NewWeakGlobalRef((E), _##C);    \
+        (C) = (*(E))->NewWeakGlobalRef((E), _##C);  \
         (*(E))->DeleteLocalRef((E), _##C);          \
-        if (C == NULL) {                            \
+        if ((C) == NULL) {                          \
             goto R;                                 \
         }                                           \
     NETTY_JNI_UTIL_END_MACRO
 
 #define NETTY_JNI_UTIL_UNLOAD_CLASS_WEAK(E, C)      \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
-        if (C != NULL) {                            \
-            (*(E))->DeleteWeakGlobalRef((E), (C));  \
-            C = NULL;                               \
+        if ((C) != NULL) {                          \
+            (*(E))->DeleteWeakGlobalRef((E), (C)); \
+            (C) = NULL;                             \
         }                                           \
     NETTY_JNI_UTIL_END_MACRO
 
@@ -90,9 +90,9 @@
 
 #define NETTY_JNI_UTIL_DELETE_LOCAL(E, L)   \
     NETTY_JNI_UTIL_BEGIN_MACRO              \
-        if (L != NULL) {                    \
-            (*(E))->DeleteLocalRef((E), L); \
-            L = NULL;                       \
+        if ((L) != NULL) {                  \
+            (*(E))->DeleteLocalRef((E), (L)); \
+            (L) = NULL;                     \
         }                                   \
     NETTY_JNI_UTIL_END_MACRO
 
@@ -122,7 +122,7 @@
 
 #define NETTY_JNI_UTIL_PREPEND(P, S, N, R)                  \
     NETTY_JNI_UTIL_BEGIN_MACRO                              \
-        if ((N = netty_jni_util_prepend(P, S)) == NULL) {   \
+        if (((N) = netty_jni_util_prepend((P), (S))) == NULL) { \
             goto R;                                         \
         }                                                   \
     NETTY_JNI_UTIL_END_MACRO
