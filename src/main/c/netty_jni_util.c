@@ -410,6 +410,12 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
         fprintf(stderr, "FATAL: %s JNI call to GetModuleFileNameA failed!\n", libname);
         fflush(stderr);
         return JNI_ERR;
+    } else if (dllPathLen >= MAX_DLL_PATH_LEN) {
+        // The path was truncated (GetModuleFileNameA returns the size of the buffer in this case) so we can not
+        // safely parse it.
+        fprintf(stderr, "FATAL: %s path of the library is longer than %d characters!\n", libname, MAX_DLL_PATH_LEN);
+        fflush(stderr);
+        return JNI_ERR;
     } else {
         // ensure we null terminate as this is not automatically done on windows xp
         dllPath[dllPathLen] = '\0';
