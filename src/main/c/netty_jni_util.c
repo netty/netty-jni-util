@@ -277,7 +277,7 @@ size_t strlcpy(char *dst, const char *src, size_t size)
         l++;
     }
     if (size)
-        *dst = CH_ZERO;
+        *dst = '\0';
     return l + strlen(src);
 }
 
