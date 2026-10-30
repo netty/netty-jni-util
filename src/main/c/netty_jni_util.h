@@ -83,7 +83,7 @@
 #define NETTY_JNI_UTIL_NEW_LOCAL_FROM_WEAK(E, C, W, R)          \
     NETTY_JNI_UTIL_BEGIN_MACRO                                  \
         C = (*(E))->NewLocalRef((E), W);                        \
-        if ((*(E))->IsSameObject((E), C, NULL) || C == NULL) {  \
+        if (C == NULL) {                                        \
             goto R;                                             \
         }                                                       \
     NETTY_JNI_UTIL_END_MACRO
