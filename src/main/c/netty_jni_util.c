@@ -325,6 +325,9 @@ typedef struct Dl_info {
      unsigned int found = 0;
      struct ld_info *ldinfos, *next_ldi, *this_ldi;
 
+     // Make sure dli_fname is always initialized, even if we fail to allocate memory below.
+     dl->dli_fname = NULL;
+
      if ((ldinfos = malloc(DLFCN_LDINFO_SIZE)) == NULL) {
          errno = ENOMEM;
          dl->dli_fname = NULL;
