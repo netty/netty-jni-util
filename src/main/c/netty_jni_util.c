@@ -374,6 +374,10 @@ typedef struct Dl_info {
 #endif /* _AIX */
 
 jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, jint (*load_function)(JNIEnv*, const char*)) {
+    if (vm == NULL || load_function == NULL) {
+        // Calling through a NULL pointer is undefined behavior.
+        return JNI_ERR;
+    }
     JNIEnv* env = NULL;
     if ((*vm)->GetEnv(vm, (void**) &env, NETTY_JNI_UTIL_JNI_VERSION) != JNI_OK) {
         fprintf(stderr, "FATAL: JNI version mismatch");
