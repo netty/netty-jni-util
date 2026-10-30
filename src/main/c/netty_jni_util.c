@@ -45,7 +45,8 @@
 
 void netty_jni_util_free_dynamic_methods_table(JNINativeMethod* dynamicMethods, jint fixedMethodTableSize, jint fullMethodTableSize) {
     if (dynamicMethods != NULL) {
-        jint i = fixedMethodTableSize;
+        // Never index before the start of the table, even if the caller passed a negative size.
+        jint i = fixedMethodTableSize < 0 ? 0 : fixedMethodTableSize;
         for (; i < fullMethodTableSize; ++i) {
             free(dynamicMethods[i].signature);
         }
