@@ -120,12 +120,20 @@ char* netty_jni_util_rstrstr(char* s1rbegin, const char* s1rend, const char* s2)
         return NULL;
     }
     size_t s2len = strlen(s2);
+    // Make sure we never create a pointer before s1rend, as this is undefined behavior.
+    if (s1rbegin < s1rend || (size_t) (s1rbegin - s1rend) < s2len) {
+        return NULL;
+    }
     char *s = s1rbegin - s2len;
 
-    for (; s >= s1rend; --s) {
+    for (;;) {
         if (strncmp(s, s2, s2len) == 0) {
             return s;
         }
+        if (s == s1rend) {
+            break;
+        }
+        --s;
     }
     return NULL;
 }
