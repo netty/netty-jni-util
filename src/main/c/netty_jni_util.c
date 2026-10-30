@@ -158,6 +158,11 @@ static char* netty_jni_util_strstr_last(const char* haystack, const char* needle
         // calling strstr with NULL is undefined behavior. Better just return NULL and not risk a crash.
         return NULL;
     }
+    if (*needle == '\0') {
+        // An empty needle matches at every position, including the terminating '\0'. Incrementing ptr after that
+        // match would read past the end of haystack, so just treat it as no match.
+        return NULL;
+    }
 
     char* prevptr = NULL;
     char* ptr = (char*) haystack;
