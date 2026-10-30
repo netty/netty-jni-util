@@ -269,7 +269,7 @@ static char* parsePackagePrefix(const char* libraryPathName, const char* libname
 // The code is taken from netbsd.org:
 // https://cvsweb.netbsd.org/bsdweb.cgi/src/crypto/external/bsd/openssl/dist/crypto/
 // o_str.c?rev=1.1.1.11.2.1;content-type=text%2Fplain
-size_t strlcpy(char *dst, const char *src, size_t size)
+static size_t netty_jni_util_strlcpy(char *dst, const char *src, size_t size)
 {
     size_t l = 0;
     for (; size > 1 && *src; size--) {
@@ -284,12 +284,12 @@ size_t strlcpy(char *dst, const char *src, size_t size)
 // The code is taken from netbsd.org:
 // https://cvsweb.netbsd.org/bsdweb.cgi/src/crypto/external/bsd/openssl/dist/crypto/
 // o_str.c?rev=1.1.1.11.2.1;content-type=text%2Fplain
-size_t strlcat(char *dst, const char *src, size_t size)
+static size_t netty_jni_util_strlcat(char *dst, const char *src, size_t size)
 {
     size_t l = 0;
     for (; size > 0 && *dst; size--, dst++)
         l++;
-    return l + strlcpy(dst, src, size);
+    return l + netty_jni_util_strlcpy(dst, src, size);
 }
 
 // The code is taken from netbsd.org:
@@ -348,16 +348,16 @@ typedef struct Dl_info {
                  buffer_sz += 1 + member_len + 1;
              found = 1;
              if ((buffer = malloc(buffer_sz)) != NULL) {
-                 strlcpy(buffer, this_ldi->ldinfo_filename, buffer_sz);
+                 netty_jni_util_strlcpy(buffer, this_ldi->ldinfo_filename, buffer_sz);
                  if (member_len > 0) {
                      /*
                       * Need to respect a possible member name and not just
                       * returning the path name in this case. See docs:
                       * sys/ldr.h, loadquery() and dlopen()/RTLD_MEMBER.
                       */
-                     strlcat(buffer, "(", buffer_sz);
-                     strlcat(buffer, member, buffer_sz);
-                     strlcat(buffer, ")", buffer_sz);
+                     netty_jni_util_strlcat(buffer, "(", buffer_sz);
+                     netty_jni_util_strlcat(buffer, member, buffer_sz);
+                     netty_jni_util_strlcat(buffer, ")", buffer_sz);
                  }
                  dl->dli_fname = buffer;
              } else {
