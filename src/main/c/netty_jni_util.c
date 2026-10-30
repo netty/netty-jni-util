@@ -91,6 +91,7 @@ jint netty_jni_util_register_natives(JNIEnv* env, const char* packagePrefix, con
     jclass nativeCls = (*env)->FindClass(env, nettyClassName);
     if (nativeCls != NULL) {
         retValue = (*env)->RegisterNatives(env, nativeCls, methods, numMethods);
+        NETTY_JNI_UTIL_DELETE_LOCAL(env, nativeCls);
     }
 done:
     free(nettyClassName);
@@ -106,6 +107,7 @@ jint netty_jni_util_unregister_natives(JNIEnv* env, const char* packagePrefix, c
     jclass nativeCls = (*env)->FindClass(env, nettyClassName);
     if (nativeCls != NULL) {
         retValue = (*env)->UnregisterNatives(env, nativeCls);
+        NETTY_JNI_UTIL_DELETE_LOCAL(env, nativeCls);
     }
 done:
     free(nettyClassName);
