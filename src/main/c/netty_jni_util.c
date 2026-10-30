@@ -376,7 +376,7 @@ typedef struct Dl_info {
 jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, jint (*load_function)(JNIEnv*, const char*)) {
     JNIEnv* env = NULL;
     if ((*vm)->GetEnv(vm, (void**) &env, NETTY_JNI_UTIL_JNI_VERSION) != JNI_OK) {
-        fprintf(stderr, "FATAL: JNI version mismatch");
+        fprintf(stderr, "FATAL: JNI version mismatch\n");
         fflush(stderr);
         return JNI_ERR;
     }
@@ -435,7 +435,7 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
 void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_function)(JNIEnv*)) {
     JNIEnv* env = NULL;
     if ((*vm)->GetEnv(vm, (void**) &env, NETTY_JNI_UTIL_JNI_VERSION) != JNI_OK) {
-        fprintf(stderr, "FATAL: JNI version mismatch");
+        fprintf(stderr, "FATAL: JNI version mismatch\n");
         fflush(stderr);
         // Something is wrong but nothing we can do about this :(
         return;
