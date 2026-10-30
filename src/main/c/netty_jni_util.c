@@ -241,7 +241,8 @@ static char* parsePackagePrefix(const char* libraryPathName, const char* libname
             continue;
         }
 
-        char nextCh = packagePrefix[i + 1];
+        // Do not look at the first character of the library name if the '_' is the last character of the prefix.
+        char nextCh = i + 1 < packagePrefixLen ? packagePrefix[i + 1] : '\0';
         if (nextCh < '0' || nextCh > '9') {
             // No digit after `_`; translate to `/`.
             newPackagePrefix[j++] = '/';
