@@ -39,6 +39,7 @@
 #include <windows.h>
 #endif // _WIN32
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "netty_jni_util.h"
