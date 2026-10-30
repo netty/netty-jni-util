@@ -98,6 +98,9 @@
 
 #define NETTY_JNI_UTIL_GET_METHOD(E, C, M, N, S, R) \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
+        if ((C) == NULL) {                          \
+            goto R;                                 \
+        }                                           \
         M = (*(E))->GetMethodID((E), C, N, S);      \
         if (M == NULL) {                            \
             goto R;                                 \
@@ -106,6 +109,9 @@
 
 #define NETTY_JNI_UTIL_GET_FIELD(E, C, F, N, S, R)  \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
+        if ((C) == NULL) {                          \
+            goto R;                                 \
+        }                                           \
         F = (*(E))->GetFieldID((E), C, N, S);       \
         if (F == NULL) {                            \
             goto R;                                 \
@@ -114,9 +120,13 @@
 
 #define NETTY_JNI_UTIL_TRY_GET_FIELD(E, C, F, N, S) \
     NETTY_JNI_UTIL_BEGIN_MACRO                      \
-        F = (*(E))->GetFieldID((E), C, N, S);       \
-        if (F == NULL) {                            \
-            (*(E))->ExceptionClear((E));            \
+        if ((C) == NULL) {                          \
+            F = NULL;                               \
+        } else {                                    \
+            F = (*(E))->GetFieldID((E), C, N, S);   \
+            if (F == NULL) {                        \
+                (*(E))->ExceptionClear((E));        \
+            }                                       \
         }                                           \
     NETTY_JNI_UTIL_END_MACRO
 
