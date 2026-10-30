@@ -465,6 +465,10 @@ jint netty_jni_util_JNI_OnLoad(JavaVM* vm, void* reserved, const char* libname, 
 }
 
 void netty_jni_util_JNI_OnUnload(JavaVM* vm, void* reserved, void (*unload_function)(JNIEnv*)) {
+    if (vm == NULL || unload_function == NULL) {
+        // Calling through a NULL pointer is undefined behavior.
+        return;
+    }
     JNIEnv* env = NULL;
     if ((*vm)->GetEnv(vm, (void**) &env, NETTY_JNI_UTIL_JNI_VERSION) != JNI_OK) {
         fprintf(stderr, "FATAL: JNI version mismatch");
